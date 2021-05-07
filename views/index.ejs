@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <title>Kamera Testi :D</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <!-- Import Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+Tamma+2:wght@400;500;600&family=Josefin+Slab&display=swap" rel="stylesheet">
+  
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
+
+  <!-- Import CSS file -->
+  <link rel="stylesheet" href="/css/styles.css">
+
+  <!-- <link rel="stylesheet" href="/css/main.css" /> -->
+
+</head>
+
+<body class="h-100">
+
+  <main class="container-fluid">
+    <div class="h-100" id="video_display">
+      <div id ="video_container" class="align-items-center" style="margin-top: 10%;">
+              <div class="local_div" id="div1" style="">
+          <!-- For playing local video -->
+          <video id="localVideo" class="" autoplay muted playsinline></video>
+        </div>
+        <div class="remote_div" id="div2">
+          <!-- For playing local audio -->
+          <video id="remoteVideo" class="" autoplay playsinline></video>
+        </div>
+          </div>
+      </div>
+</main>
+<nav class="navbar fixed-bottom navbar-expand-sm navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Selam :D</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Link</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+        </li>
+        <li class="nav-item dropup" onclick="microphoneDropdownClicked()">
+          <a class="nav-link dropdown-toggle" href="#" id="dropdown10" data-bs-toggle="dropdown" aria-expanded="false"><i class="glyphicon glyphicon-bullhorn"></i>Microphone</a>
+          <ul class="dropdown-menu" aria-labelledby="dropdown10" id="microphoneDropdown">
+            <li><a class="dropdown-item" href="#">Action</a></li>
+            <li><a class="dropdown-item" href="#">Another action</a></li>
+            <li><a class="dropdown-item" href="#">Something else here</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+
+  <!-- Import SocketIO for signalling -->
+  <script src="/socket.io/socket.io.js"></script>
+
+  <!-- Import WebRTC adapter for compatibility with all the browsers  -->
+  <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+  
+  <!-- Import TURN config -->
+  <script src="js\config.js"></script>
+
+  <!-- Import script containing WebRTC related functions -->
+  <script src="js\main.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
+
+  <script
+			  src="https://code.jquery.com/jquery-3.6.0.min.js"
+			  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+			  crossorigin="anonymous"></script>
+
+  <script>
+    
+    function changeAudioDevice(deviceId) {
+        console.log(deviceId);
+        console.log(window.localStream);
+        var audioTrack = window.localStream.getAudioTracks()[0].id;
+
+    }
+
+    function microphoneDropdownClicked() {
+      $('#microphoneDropdown').empty()
+
+      navigator.mediaDevices.enumerateDevices().then((devices) => {
+        devices = devices.filter((d) => d.kind === 'audioinput');
+        devices.forEach((device) => {
+          console.log(device);
+          $('#microphoneDropdown').append("<li><a class=\"dropdown-item\" href=\"#\" onclick=\"changeAudioDevice('"+device.deviceId+"')\">" + device.label + "</a></li>")
+        })
+      });
+
+    }
+
+  </script>
+  
+</body>
+
+</html>

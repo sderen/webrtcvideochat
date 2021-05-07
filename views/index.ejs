@@ -44,25 +44,21 @@
     <div class="collapse navbar-collapse" id="navbarCollapse">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
+          <a class="nav-link" href="#" id="muteToggle" onclick="toggleMute()">Mute</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Link</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-        </li>
+        
         <li class="nav-item dropup" onclick="microphoneDropdownClicked()">
           <a class="nav-link dropdown-toggle" href="#" id="dropdown10" data-bs-toggle="dropdown" aria-expanded="false"><i class="glyphicon glyphicon-bullhorn"></i>Microphone</a>
           <ul class="dropdown-menu" aria-labelledby="dropdown10" id="microphoneDropdown">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
           </ul>
         </li>
+
+        <li class="nav-item dropup" onclick="cameraDropdownClicked()">
+          <a class="nav-link dropdown-toggle" href="#" id="dropdown10" data-bs-toggle="dropdown" aria-expanded="false"><i class="glyphicon glyphicon-bullhorn"></i>Camera</a>
+          <ul class="dropdown-menu" aria-labelledby="dropdown10" id="cameraDropdown">
+          </ul>
+        </li>
+
       </ul>
     </div>
   </div>
@@ -88,7 +84,13 @@
 			  crossorigin="anonymous"></script>
 
   <script>
-    
+
+    function toggleMute() {
+      const next = !localStream.getAudioTracks()[0].enabled;
+      localStream.getAudioTracks()[0].enabled = next;
+      $("#muteToggle").toggleClass("active");
+    }
+
     function changeAudioDevice(deviceId) {
         console.log(deviceId);
         console.log(window.localStream);
@@ -106,8 +108,30 @@
           $('#microphoneDropdown').append("<li><a class=\"dropdown-item\" href=\"#\" onclick=\"changeAudioDevice('"+device.deviceId+"')\">" + device.label + "</a></li>")
         })
       });
+    }
+
+
+      
+    function changeVideoDevice(deviceId) {
+        console.log(deviceId);
+        console.log(window.localStream);
+        var audioTrack = window.localStream.getAudioTracks()[0].id;
 
     }
+
+    function cameraDropdownClicked() {
+      $('#cameraDropdown').empty()
+
+      navigator.mediaDevices.enumerateDevices().then((devices) => {
+        devices = devices.filter((d) => d.kind === 'videoinput');
+        devices.forEach((device) => {
+          console.log(device);
+          $('#cameraDropdown').append("<li><a class=\"dropdown-item\" href=\"#\" onclick=\"changeVideoDevice('"+device.deviceId+"')\">" + device.label + "</a></li>")
+        })
+      });
+
+    }
+    
 
   </script>
   

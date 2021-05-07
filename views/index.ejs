@@ -93,12 +93,18 @@
       $("#muteToggle").toggleClass("active");
     }
 
-    function changeAudioDevice(deviceId) {
+    async function changeVideoDevice(deviceId) {
         console.log(deviceId);
         console.log(window.localStream);
-        var audioTrack = window.localStream.getAudioTracks()[0].id;
+        var oldTrack = window.localStream.getAudioTracks()[0];
+        const senders = pc.getSenders();
 
-    }
+        const newStream = await navigator.mediaDevices.getUserMedia({ audio: { deviceId } });
+        newStream.getAudioTracks().forEach(track => {
+          const sender = senders.find(sender => sender.track.id === oldTrack.id); // bütün sneder lar ın arasında audio gönderenler de var o yüzden id ile veya kind ile bulmak gerek.
+          sender.replaceTrack(track);
+        });
+      }
 
     function microphoneDropdownClicked() {
       $('#microphoneDropdown').empty()
@@ -114,12 +120,18 @@
 
 
       
-    function changeVideoDevice(deviceId) {
+    async function changeVideoDevice(deviceId) {
         console.log(deviceId);
         console.log(window.localStream);
-        var audioTrack = window.localStream.getAudioTracks()[0].id;
+        var oldTrack = window.localStream.getVideoTracks()[0];
+        const senders = pc.getSenders();
 
-    }
+        const newStream = await navigator.mediaDevices.getUserMedia({ video: { deviceId } });
+        newStream.getVideoTracks().forEach(track => {
+          const sender = senders.find(sender => sender.track.id === oldTrack.id); // bütün sneder lar ın arasında video gönderenle de var o yüzden id ile veya kind ile bulmak gerek.
+          sender.replaceTrack(track);
+        });
+      }
 
     function cameraDropdownClicked() {
       $('#cameraDropdown').empty()
